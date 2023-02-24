@@ -627,6 +627,9 @@ start_time="$(date -u +%s)"
 echo -e "\n# Interbotix Configurations" >> ~/.bashrc
 
 export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}
+export https_proxy=http://icache.intracomtel.com:80/
+export http_proxy=http://icache.intracomtel.com:80/
+
 
 # Update the system
 apt-get update && apt-get -y upgrade
