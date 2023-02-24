@@ -1,0 +1,39 @@
+sudo apt install docker.io
+
+sudo systemctl enable --now docker
+
+# For Docker to work we have to set proxy settings as mentioned here https://stackoverflow.com/questions/49387263/docker-error-response-from-daemon-get-https-registry-1-docker-io-v2-servic
+# env | grep proxy # to view proxy settings
+# sudo nano /etc/default/docker # export http_proxy="http://ip:port"
+
+## inside the container (probably in bashrc)
+# set proxy again
+export no_proxy=localhost,127.0.0.0/8,::1,.intranet.gr,.intracomtel.com,10.124.0.0/16,146.124.0.0/16
+export ftp_proxy=http://icache.intracomtel.com:80/
+export https_proxy=http://icache.intracomtel.com:80/
+export http_proxy=http://icache.intracomtel.com:80/
+# tell it where to find ros installation
+source /opt/ros/noetic/setup.bash
+
+
+## -- 
+
+## docker commands
+# view local docker images
+sudo docker images
+
+# run image with known image_id or image_name(-it merans interactive)
+sudo docker run -it image_id
+sudo docker run -it image_name
+
+# give name to the container to run
+sudo docker run --name my_name -it image_name
+
+# execute command in running docker container with container_id. Here: open bash terminal for the container
+sudo docker exec -it container_id bash
+
+# docker with proxy settings using --build-arg (only for installation)
+sudo docker build --build-arg http_proxy=http://icache.intracomtel.com:80/ --build-arg https_proxy=http://icache.intracomtel.com:80/ --no-cache -t xslocobot .
+
+# nope
+sudo docker run -it -e http_proxy=http://icache.intracomtel.com:80/ -e https_proxy=http://icache.intracomtel.com:80/ 3ea6bdc3c8e1 
