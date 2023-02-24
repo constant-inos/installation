@@ -206,18 +206,18 @@ function check_ubuntu_version() {
 
 function install_essential_packages() {
   # Install necessary core packages
-  sudo apt-get install -yq openssh-server curl net-tools
+  apt-get install -yq openssh-server curl net-tools
   if [ $PY_VERSION == 2 ]; then
-    sudo apt-get install -yq python-pip
-    sudo -H pip install modern_robotics six
+    apt-get install -yq python-pip
+    -H pip install modern_robotics six
   elif [ $PY_VERSION == 3 ]; then
-    sudo apt-get install -yq python3-pip
-    sudo -H pip3 install modern_robotics six
+    apt-get install -yq python3-pip
+    -H pip3 install modern_robotics six
   else
     failed "Something went wrong."
   fi
   if [ $ROS_VERSION_TO_INSTALL == 2 ]; then
-    sudo pip3 install transforms3d
+    pip3 install transforms3d
   fi
 }
 
@@ -225,29 +225,29 @@ function install_ros1() {
   # Installs ROS 1
   if [ $(dpkg-query -W -f='${Status}' ros-$ROS_DISTRO_TO_INSTALL-desktop-full 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     echo -e "${GRN}Installing ROS 1 $ROS_DISTRO_TO_INSTALL...${OFF}"
-    sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
-    curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | sudo apt-key add -
-    sudo apt update
-    sudo apt-get install -yq ros-$ROS_DISTRO_TO_INSTALL-desktop-full
+    sh -c 'echo "deb http://packages.ros.org/ros/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/ros-latest.list'
+    curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
+    apt update
+    apt-get install -yq ros-$ROS_DISTRO_TO_INSTALL-desktop-full
     if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
-      sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
+      rm /etc/ros/rosdep/sources.list.d/20-default.list
     fi
     if [ $PY_VERSION == 2 ]; then
-      sudo apt-get install -yq      \
+      apt-get install -yq      \
       python-rosdep                 \
       python-rosinstall             \
       python-rosinstall-generator   \
       python-wstool                 \
       build-essential
     else
-      sudo apt-get install -yq      \
+      apt-get install -yq      \
       python3-rosdep                \
       python3-rosinstall            \
       python3-rosinstall-generator  \
       python3-wstool                \
       build-essential
     fi
-    sudo rosdep init
+    rosdep init
     rosdep update --include-eol-distros
     echo "source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash" >> ~/.bashrc
   else
@@ -260,25 +260,25 @@ function install_ros2() {
   # Installs ROS 2
   if [ $(dpkg-query -W -f='${Status}' ros-$ROS_DISTRO_TO_INSTALL-desktop 2>/dev/null | grep -c "ok installed") -eq 0 ]; then
     echo -e "${GRN}Installing ROS 2 $ROS_DISTRO_TO_INSTALL...${OFF}"
-    sudo apt-get install -yq      \
+    apt-get install -yq      \
       software-properties-common  \
       gnupg
-    sudo add-apt-repository -y universe
-    sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
-    sudo apt update
-    sudo apt-get install -yq ros-$ROS_DISTRO_TO_INSTALL-desktop
+    add-apt-repository -y universe
+    curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(source /etc/os-release && echo $UBUNTU_CODENAME) main" | tee /etc/apt/sources.list.d/ros2.list > /dev/null
+    apt update
+    apt-get install -yq ros-$ROS_DISTRO_TO_INSTALL-desktop
     if [ -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
-      sudo rm /etc/ros/rosdep/sources.list.d/20-default.list
+      rm /etc/ros/rosdep/sources.list.d/20-default.list
     fi
-    sudo apt-get install -yq            \
+    apt-get install -yq            \
       python3-rosdep                    \
       python3-rosinstall                \
       python3-rosinstall-generator      \
       python3-wstool                    \
       build-essential                   \
       python3-colcon-common-extensions
-    sudo rosdep init
+    rosdep init
     rosdep update --include-eol-distros
     if [[ $ROS_VERSION_TO_INSTALL == 2 ]]; then
       echo "source /opt/ros/$ROS_DISTRO_TO_INSTALL/setup.bash" >> ~/.bashrc
@@ -325,8 +325,8 @@ function install_locobot_ros1() {
       interbotix_ros_toolboxes/interbotix_perception_toolbox/CATKIN_IGNORE                          \
       interbotix_ros_toolboxes/interbotix_common_toolbox/interbotix_moveit_interface/CATKIN_IGNORE
     cd interbotix_ros_core/interbotix_ros_xseries/interbotix_xs_sdk
-    sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
-    sudo udevadm control --reload-rules && sudo udevadm trigger
+    cp 99-interbotix-udev.rules /etc/udev/rules.d/
+    udevadm control --reload-rules && udevadm trigger
     cd $INSTALL_PATH
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
     if [ $BASE_TYPE == "create3" ]; then
@@ -361,8 +361,8 @@ function install_locobot_ros2() {
     git submodule update --init interbotix_ros_xseries/dynamixel_workbench_toolbox
     git submodule update --init interbotix_ros_xseries/interbotix_xs_driver
     cd interbotix_ros_xseries/interbotix_xs_sdk
-    sudo cp 99-interbotix-udev.rules /etc/udev/rules.d/
-    sudo udevadm control --reload-rules && sudo udevadm trigger
+    cp 99-interbotix-udev.rules /etc/udev/rules.d/
+    udevadm control --reload-rules && udevadm trigger
     cd $INSTALL_PATH
     rosdep install --from-paths src --ignore-src -r -y --rosdistro=$ROS_DISTRO_TO_INSTALL
     if colcon build; then
@@ -381,11 +381,11 @@ function install_kobuki_ros1() {
   cd $INSTALL_PATH/src
   # no noetic branch - install from melodic branch source instead
   git clone https://github.com/yujinrobot/kobuki -b melodic
-  sudo apt-get install -yq liborocos-kdl-dev
+  apt-get install -yq liborocos-kdl-dev
   git clone https://github.com/yujinrobot/yujin_ocs.git
   cd yujin_ocs
   # Remove unused packages from yujin_ocs repo
-  sudo rm -rf                       \
+  rm -rf                       \
     yocs_ar_marker_tracking         \
     yocs_ar_pair_approach           \
     yocs_ar_pair_tracking           \
@@ -513,9 +513,9 @@ function config_rmw() {
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
     echo "export FASTRTPS_DEFAULT_PROFILES_FILE=${FASTRTPS_DEFAULT_PROFILES_FILE}" >> ~/.bashrc
     echo "export ROS_DISCOVERY_SERVER=127.0.0.1:11811" >> ~/.bashrc
-    sudo cp ${INSTALL_PATH}/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/fastdds_disc_server.service /lib/systemd/system/
-    sudo systemctl daemon-reload
-    sudo systemctl enable fastdds_disc_server.service
+    cp ${INSTALL_PATH}/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/service/fastdds_disc_server.service /lib/systemd/system/
+    systemctl daemon-reload
+    systemctl enable fastdds_disc_server.service
   fi
 }
 
@@ -567,9 +567,9 @@ validate_base_type
 echo "1822"
 if ! command -v lsb_release &> /dev/null; then
   echo "1823"
-  sudo apt-get update
+  apt-get update
   echo "1824"
-  sudo apt-get install -yq lsb-release
+  apt-get install -yq lsb-release
   echo "1825"
 fi
 
@@ -629,8 +629,8 @@ echo -e "\n# Interbotix Configurations" >> ~/.bashrc
 export INTERBOTIX_XSLOCOBOT_BASE_TYPE=${BASE_TYPE}
 
 # Update the system
-sudo apt-get update && sudo apt-get -y upgrade
-sudo apt-get -y autoremove
+apt-get update && apt-get -y upgrade
+apt-get -y autoremove
 
 install_essential_packages
 
@@ -664,13 +664,13 @@ fi
 
 # configure LoCoBot computer ethernet to use proper network config for Create 3
 if [[ $BASE_TYPE == 'create3' ]]; then
-  sudo apt-get install -yq netplan.io
+  apt-get install -yq netplan.io
   if [ ! -f "/etc/netplan/99_interbotix_config.yaml" ]; then
     if [ ! -d "/etc/netplan/" ]; then
-      sudo mkdir -p /etc/netplan/
+      mkdir -p /etc/netplan/
     fi
-    sudo cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/conf/99_interbotix_config_locobot.yaml /etc/netplan/
-    sudo netplan apply
+    cp $INSTALL_PATH/src/interbotix_ros_rovers/interbotix_ros_xslocobots/install/resources/conf/99_interbotix_config_locobot.yaml /etc/netplan/
+    netplan apply
     sleep 10
   fi
 fi
