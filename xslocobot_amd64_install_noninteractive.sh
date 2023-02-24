@@ -113,7 +113,7 @@ $_install_warning
 EOF
 
 echo -e "\nContinue anyways?\n${PROMPT}${NORM}${OFF}\c"
-read -r resp
+#read -r resp
 if [[ $resp == [yY] || $resp == [yY][eE][sS] ]]; then
   :
 else
