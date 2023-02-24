@@ -209,15 +209,15 @@ function install_essential_packages() {
   apt-get install -yq openssh-server curl net-tools
   if [ $PY_VERSION == 2 ]; then
     apt-get install -yq python-pip
-    -H pip install modern_robotics six
+    pip install modern_robotics six
   elif [ $PY_VERSION == 3 ]; then
     apt-get install -yq python3-pip
-    -H pip3 install modern_robotics six
+    pip install modern_robotics six
   else
     failed "Something went wrong."
   fi
   if [ $ROS_VERSION_TO_INSTALL == 2 ]; then
-    pip3 install transforms3d
+    pip install transforms3d
   fi
 }
 
