@@ -109,16 +109,16 @@ ${NORM}"
 function print_install_warning() {
   # print usage
   cat << EOF
-$_install_warning
-EOF
+  $_install_warning
+  EOF
 
-echo -e "\nContinue anyways?\n${PROMPT}${NORM}${OFF}\c"
-#read -r resp
-if [[ $resp == [yY] || $resp == [yY][eE][sS] ]]; then
-  :
-else
-  exit 0
-fi
+  echo -e "\nContinue anyways?\n${PROMPT}${NORM}${OFF}\c"
+  read -r resp
+  if [[ $resp == [yY] || $resp == [yY][eE][sS] ]]; then
+    :
+  else
+    exit 0
+  fi
 }
 
 # https://stackoverflow.com/a/8574392/16179107
