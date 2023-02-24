@@ -567,7 +567,7 @@ validate_base_type
 echo "1822"
 if ! command -v lsb_release &> /dev/null; then
   echo "1823"
-  sudo apt update
+  sudo apt-get update
   echo "1824"
   sudo apt-get install -yq lsb-release
   echo "1825"
