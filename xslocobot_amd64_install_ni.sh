@@ -562,11 +562,15 @@ if [ "$NONINTERACTIVE" = false ]; then
   print_install_warning
 fi
 
+echo "1821"
 validate_base_type
-
+echo "1822"
 if ! command -v lsb_release &> /dev/null; then
+  echo "1823"
   sudo apt update
+  echo "1824"
   sudo apt-get install -yq lsb-release
+  echo "1825"
 fi
 
 UBUNTU_VERSION="$(lsb_release -rs)"
