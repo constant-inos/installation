@@ -26,15 +26,18 @@ RUN apt -y install python3-rosdep python3-rosinstall python3-rosinstall-generato
 RUN rosdep init 
 RUN rosdep update
 
-# alias for non-intercive shell commands
-RUN echo 'python3' > /usr/bin/python && chmod +x /usr/bin/python 
+RUN python3 -m pip install numpy==1.20.3 open3d
 
+# alias for non-intercive shell commands
+RUN echo '#!/usr/bin/python3' > /usr/bin/python && chmod +x /usr/bin/python 
+# #!/usr/bin/env python
 RUN cd ~ && git clone --branch main3 https://github.com/constant-inos/Workspaces.git
 RUN echo "source ~/Workspaces/intrarobots_ws/devel/setup.bash" >> ~/.bashrc
 
 # SHELL ["/bin/bash", "-c"]
 RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; bash ~/Workspaces/intrarobots_ws/src/extras/create_packages.sh'
 RUN /bin/bash -c '. ~/Workspaces/intrarobots_ws/devel/setup.bash'
+RUN /bin/bash -c 'bash update_gazebo_models.sh'
 
 
 # RUN source ~/.bashrc
