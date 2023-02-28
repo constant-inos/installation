@@ -37,7 +37,7 @@ RUN echo "source ~/Workspaces/intrarobots_ws/devel/setup.bash" >> ~/.bashrc
 # SHELL ["/bin/bash", "-c"]
 RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; bash ~/Workspaces/intrarobots_ws/src/extras/create_packages.sh'
 RUN /bin/bash -c '. ~/Workspaces/intrarobots_ws/devel/setup.bash'
-RUN /bin/bash -c 'bash update_gazebo_models.sh'
+RUN /bin/bash -c 'cd /home/ntinos/Workspaces/intrarobots_ws/src/extras && bash update_gazebo_models.sh'
 
 
 # RUN source ~/.bashrc
