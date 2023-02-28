@@ -1,8 +1,15 @@
-sudo apt install docker.io
+# install Docker 
+# https://docs.docker.com/engine/install/ubuntu/
 
 sudo systemctl enable --now docker
 
-# For Docker to work we have to set proxy settings as mentioned here https://stackoverflow.com/questions/49387263/docker-error-response-from-daemon-get-https-registry-1-docker-io-v2-servic
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+
+# For Docker to work we have to set proxy settings as mentioned here:
+# https://stackoverflow.com/questions/49387263/docker-error-response-from-daemon-get-https-registry-1-docker-io-v2-servic
+# https://docs.docker.com/config/daemon/systemd/
 # env | grep proxy # to view proxy settings
 # sudo nano /etc/default/docker # export http_proxy="http://ip:port"
 
@@ -21,6 +28,9 @@ source /opt/ros/noetic/setup.bash
 ## docker commands
 # view local docker images
 sudo docker images
+
+# docker build
+sudo docker build --no-cache -t robot .
 
 # run image with known image_id or image_name(-it merans interactive)
 sudo docker run -it image_id

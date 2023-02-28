@@ -17,6 +17,7 @@ RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
 RUN apt update 
 RUN apt -y install ros-noetic-desktop-full
+RUN echo "alias python=python3" >> ~/.bashrc
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 RUN apt -y install ros-noetic-moveit 
 RUN apt -y install ros-noetic-moveit-visual-tools ros-noetic-effort-controllers ros-noetic-joint-trajectory-controller
@@ -25,9 +26,20 @@ RUN apt -y install python3-rosdep python3-rosinstall python3-rosinstall-generato
 RUN rosdep init 
 RUN rosdep update
 
+# alias for non-intercive shell commands
+RUN echo 'python3' > /usr/bin/python && chmod +x /usr/bin/python 
+
 RUN cd ~ && git clone --branch main3 https://github.com/constant-inos/Workspaces.git
-RUN bash ~/Workspaces/intrarobots_ws/src/extras/create_packages.sh 
 RUN echo "source ~/Workspaces/intrarobots_ws/devel/setup.bash" >> ~/.bashrc
+
+# SHELL ["/bin/bash", "-c"]
+RUN /bin/bash -c '. /opt/ros/noetic/setup.bash; bash ~/Workspaces/intrarobots_ws/src/extras/create_packages.sh'
+RUN /bin/bash -c '. ~/Workspaces/intrarobots_ws/devel/setup.bash'
+
+
+# RUN source ~/.bashrc
+# RUN bash ~/Workspaces/intrarobots_ws/src/extras/create_packages.sh 
+# RUN echo "source ~/Workspaces/intrarobots_ws/devel/setup.bash" >> ~/.bashrc
 
 # RUN  echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc 
 # RUN  echo "source ~/Workspaces/intrarobots_ws/devel/setup.bash" >> ~/.bashrc && source ~/.bashrc
