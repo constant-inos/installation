@@ -3,6 +3,9 @@ FROM ubuntu:focal
 
 RUN apt-get update
 
+RUN /bin/bash -c 'export https_proxy=http://icache.intracomtel.com:80/'
+RUN /bin/bash -c 'export http_proxy=http://icache.intracomtel.com:80/'
+
 RUN apt-get install -y python3-pip
 RUN apt-get install -y git curl
 RUN apt-get install -y vim nano
@@ -10,14 +13,14 @@ RUN apt-get install -y vim nano
 ENV TZ=Europe/Athens
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV DEBIAN_FRONTEND noninteractive
-RUN 
 
 RUN sh -c 'echo "deb http://packages.ros.org/ros/ubuntu focal main" > /etc/apt/sources.list.d/ros-latest.list'
-RUN apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+RUN gpg  --keyserver-options http-proxy=http://icache.intracomtel.com:80/ --keyserver-options https-proxy=http://icache.intracomtel.com:80/ --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
 RUN curl -s https://raw.githubusercontent.com/ros/rosdistro/master/ros.asc | apt-key add -
 RUN apt update 
 RUN apt -y install ros-noetic-desktop-full
-RUN echo "alias python=python3" >> ~/.bashrc
+# RUN echo "alias python=python3" >> ~/.bashrc
+RUN cp /usr/bin/python3 /usr/bin/python
 RUN echo "source /opt/ros/noetic/setup.bash" >> ~/.bashrc
 RUN apt -y install ros-noetic-moveit 
 RUN apt -y install ros-noetic-moveit-visual-tools ros-noetic-effort-controllers ros-noetic-joint-trajectory-controller
@@ -29,7 +32,7 @@ RUN rosdep update
 RUN python3 -m pip install numpy==1.20.3 open3d
 
 # alias for non-intercive shell commands
-RUN echo '#!/usr/bin/python3' > /usr/bin/python && chmod +x /usr/bin/python 
+# RUN echo '#!/usr/bin/python3' > /usr/bin/python && chmod +x /usr/bin/python 
 # #!/usr/bin/env python
 RUN cd ~ && git clone --branch main3 https://github.com/constant-inos/Workspaces.git
 RUN echo "source ~/Workspaces/intrarobots_ws/devel/setup.bash" >> ~/.bashrc

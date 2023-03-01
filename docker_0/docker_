@@ -47,3 +47,11 @@ sudo docker build --build-arg http_proxy=http://icache.intracomtel.com:80/ --bui
 
 # nope
 sudo docker run -it -e http_proxy=http://icache.intracomtel.com:80/ -e https_proxy=http://icache.intracomtel.com:80/ 3ea6bdc3c8e1 
+
+
+
+# push image
+sudo docker logout
+sudo docker login
+sudo docker tag firstimage YOUR_DOCKERHUB_NAME/firstimage
+sudo docker push YOUR_DOCKERHUB_NAME/firstimage
